@@ -10,16 +10,13 @@ class Socketlib_Companion {
         window.Boneyard.Socketlib_Companion = {
             module_id: Socketlib_Companion.module_id,
             debug: false,
-			prepare_func: Socketlib_Companion.prepare_func,
-			recover_func: Socketlib_Companion.recover_func,
-			boneyard_exec: Socketlib_Companion.boneyard_exec,
-			executeAsGM_wrapper: Socketlib_Companion.executeAsGM_wrapper,
-			executeAsUser_wrapper: Socketlib_Companion.executeAsUser_wrapper,
-			executeForAllGMs_wrapper: Socketlib_Companion.executeForAllGMs_wrapper,
-			executeForOtherGMs_wrapper: Socketlib_Companion.executeForOtherGMs_wrapper,
-			executeForEveryone_wrapper: Socketlib_Companion.executeForEveryone_wrapper,
-			executeForOthers_wrapper: Socketlib_Companion.executeForOthers_wrapper,
-			executeForUsers_wrapper: Socketlib_Companion.executeForUsers_wrapper
+			executeAsGM: Socketlib_Companion.executeAsGM,
+			executeAsUser: Socketlib_Companion.executeAsUser,
+			executeForAllGMs: Socketlib_Companion.executeForAllGMs,
+			executeForOtherGMs: Socketlib_Companion.executeForOtherGMs,
+			executeForEveryone: Socketlib_Companion.executeForEveryone,
+			executeForOthers: Socketlib_Companion.executeForOthers,
+			executeForUsers: Socketlib_Companion.executeForUsers
         };
 		
 		Socketlib_Companion.log("Socketlib companion initialized");
@@ -39,7 +36,6 @@ class Socketlib_Companion {
     static register_socket() {
         Socketlib_Companion.socket = socketlib.registerModule(Socketlib_Companion.module_id);
         Socketlib_Companion.socket.register("boneyard_exec", Socketlib_Companion.boneyard_exec)
-		if (window?.Boneyard?.Socketlib_Companion !== undefined) window.Boneyard.Socketlib_Companion.socket = Socketlib_Companion.socket;
         Socketlib_Companion.log("socket set");
     }
 
@@ -60,25 +56,47 @@ class Socketlib_Companion {
         return (await func(args));
     }
 
-    static async executeAsGM_wrapper(func, args) {
+    static async executeAsGM(func, args) {
+		if (typeof func !== 'function') throw new TypeError("Parameter 'func' missing/incorrect type.");
+		if (args !== undefined && typeof args !== 'object') throw new TypeError("Parameter 'args' incorrect type.");
         return Socketlib_Companion.socket.executeAsGM("boneyard_exec", Socketlib_Companion.prepare_func(func), args);
     }
-    static async executeAsUser_wrapper(userID, func, args) {
+	
+    static async executeAsUser(userID, func, args) {
+		if (typeof userID !== 'string') throw new TypeError("Parameter 'userID' missing/incorrect type.");
+		if (typeof func !== 'function') throw new TypeError("Parameter 'func' missing/incorrect type.");
+		if (args !== undefined && typeof args !== 'object') throw new TypeError("Parameter 'args' incorrect type.");
         return Socketlib_Companion.socket.executeAsUser("boneyard_exec", userID, Socketlib_Companion.prepare_func(func), args);
     }
-    static async executeForAllGMs_wrapper(func, args) {
+	
+    static async executeForAllGMs(func, args) {
+		if (typeof func !== 'function') throw new TypeError("Parameter 'func' missing/incorrect type.");
+		if (args !== undefined && typeof args !== 'object') throw new TypeError("Parameter 'args' incorrect type.");
         return Socketlib_Companion.socket.executeForAllGMs("boneyard_exec", Socketlib_Companion.prepare_func(func), args);
     }
-    static async executeForOtherGMs_wrapper(func, args) {
+	
+    static async executeForOtherGMs(func, args) {
+		if (typeof func !== 'function') throw new TypeError("Parameter 'func' missing/incorrect type.");
+		if (args !== undefined && typeof args !== 'object') throw new TypeError("Parameter 'args' incorrect type.");
         return Socketlib_Companion.socket.executeForOtherGMs("boneyard_exec", Socketlib_Companion.prepare_func(func), args);
     }
-    static async executeForEveryone_wrapper(func, args) {
+	
+    static async executeForEveryone(func, args) {
+		if (typeof func !== 'function') throw new TypeError("Parameter 'func' missing/incorrect type.");
+		if (args !== undefined && typeof args !== 'object') throw new TypeError("Parameter 'args' incorrect type.");
         return Socketlib_Companion.socket.executeForEveryone("boneyard_exec", Socketlib_Companion.prepare_func(func), args);
     }
-    static async executeForOthers_wrapper(func, args) {
+	
+    static async executeForOthers(func, args) {
+		if (typeof func !== 'function') throw new TypeError("Parameter 'func' missing/incorrect type.");
+		if (args !== undefined && typeof args !== 'object') throw new TypeError("Parameter 'args' incorrect type.");
         return Socketlib_Companion.socket.executeForOthers("boneyard_exec", Socketlib_Companion.prepare_func(func), args);
     }
-    static async executeForUsers_wrapper(recipients, func, args) {
+	
+    static async executeForUsers(recipients, func, args) {
+		if (Object.prototype.toString.call(recipients) !== '[object Array]') throw new TypeError("Parameter 'recipients' missing/incorrect type.");
+		if (typeof func !== 'function') throw new TypeError("Parameter 'func' missing/incorrect type.");
+		if (args !== undefined && typeof args !== 'object') throw new TypeError("Parameter 'args' incorrect type.");
         return Socketlib_Companion.socket.executeForUsers("boneyard_exec", recipients, Socketlib_Companion.prepare_func(func), args);
     }
 
