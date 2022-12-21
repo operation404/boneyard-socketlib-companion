@@ -1,39 +1,59 @@
-# Boneyard
-Boneyard is a module for the general use tools I write for my Foundry games. Right now, it includes the following tools:
-- [Quick drawing tool settings menus](#quick-drawing-tools-colorsettings-adjuster)
-- [Socketlib anonymous function wrappers](#socketlib-wrapper-functions-for-executing-anonymous-functions)
+# Boneyard Collection
+- [Boneyard Drawing Tools](https://github.com/operation404/boneyard-drawing-tools)
+- [Boneyard Template Tools](https://github.com/operation404/boneyard-template-tools)
+- [Boneyard Socketlib Companion](https://github.com/operation404/boneyard-socketlib-companion)
 
-Be sure to meet the [Requirements](#requirements) before using Boneyard.
+# Boneyard Socketlib Companion
+- [Security Warning](#security-warning)
+- [Requirements](#requirements)
+- [Socketlib Anonymous Function Wrappers](#socketlib-anonymous-function-wrappers)
+- [Understanding Serialization](#understanding-serialization)
 
-## Quick drawing tools color/settings adjuster
-Boneyard adds two new tools to the Drawing sidebar. These tools open a quick menu that allows fast adjustment of stroke or fill color, opacity, line width, and fill type. The changes to drawing settings are continuously updated as you make adjustments on the panel, and it can be closed by clicking anywhere off of it.
+## Security Warning
+Boneyard Socketlib Companion provides the ability to **execute arbitrary Javascript** code on other clients connected to a Foundry server. While this can be quite handy in its intended use as a library for macros that can allow players to modify actors and other documents they don't have permissions to access or perform any other actions that require GM privileges, it also has the potential to be used maliciously to perform **Javascript Injection** attacks. 
 
-The first tool controls line settings. The menu for lines contains options for changing stroke color, opacity, and line width.
+As such, the author of this module can only recommend a GM to install it if you both understand how to properly utilize it and fully trust any players who are given access to it. Likewise as a player, you should only play in a Foundry game that has the Boneyard Socketlib Companion module if you fully trust the game's GM.
 
-![Stroke Example. The line menu has options for changing stroke color, opacity, and width.](https://github.com/operation404/fvtt-boneyard/blob/main/images/stroke_example.png?raw=true)
+## Requirements
+The following modules are required for Boneyard Socketlib Companion to function:
+* [socketlib](https://github.com/manuelVo/foundryvtt-socketlib)
 
-The second tool controls fill settings. The menu for fill contains options for changing fill color, opacity, and fill type.
-
-![Stroke Example. The line menu has options for changing stroke color, opacity, and width.](https://github.com/operation404/fvtt-boneyard/blob/main/images/fill_example.png?raw=true)
-
-## Socketlib wrapper functions for executing anonymous functions
-It is possible to execute anonymous functions through the wrapper functions Boneyard provides. Boneyard converts the function to a string and sends that string through socketlib to a registered handler which parses the string back into a function and executes it. 
+## Socketlib Anonymous Function Wrappers
+Boneyard Socketlib Companion acquires a socket through socketlib and registers utility functions that allow anonymous functions to be sent over its socket and executed on other clients connected to the Foundry server. Boneyard Socketlib Companion then registers a handler for each of the socketlib api functions. These handlers all take in a function and arguments object as parameters and call the registered parsing function through their respective socketlib api call.
 
 ```js
-Boneyard.executeForEveryone_wrapper((args) => {
+Boneyard.Socketlib_Companion.executeForEveryone((args) => {
   console.log(`Greetings ${game.user.name}!`);
 });
 
 // Each user should see 'Greetings' followed by their name
 ```
 
-The functions can have a single argument called *args* which should be an object that contains any actual arguments the function might need.
+Boneyard Socketlib Companion provides an asynchronous wrapper function for each of the socketlib api functions. These functions are available to be called through the global `Boneyard.Socketlib_Companion` namespace. 
 
 ```js
-let result = await Boneyard.executeAsGM_wrapper((args) => {
+// in the Socketlib_Companion class
+static async executeAsGM(func, args)
+static async executeAsUser(userID, func, args)
+static async executeForAllGMs(func, args)
+static async executeForOtherGMs(func, args)
+static async executeForEveryone(func, args)
+static async executeForOthers(func, args)
+static async executeForUsers(recipients, func, args)
+
+// example call
+Boneyard.Socketlib_Companion.executeForEveryone(fn, args);
+```
+
+The function wrappers all require a function argument to be passed, of which that function can optionally have a single argument `args` which should be an object containing any actual parameters the passed function might need. Some wrapper functions may also require additional parameters such as a user's ID.
+
+These wrapper functions also return the socketlib api call return value, allowing you to receive information back from the clients the anonymous function was executed on.
+
+```js
+let result = await Boneyard.Socketlib_Companion.executeAsGM((args) => {
   console.log(args.a);
   console.log(args.b);
-  let c = args.a+args.b;
+  const c = args.a+args.b;
   console.log(c);
   return c;
 }, {a: 5, b: 3});
@@ -41,60 +61,35 @@ let result = await Boneyard.executeAsGM_wrapper((args) => {
 result += 1;
 console.log(result);
 
-// Should output 5, 3, 8, and 9
+// Client should output 5, 3, and 8
+// Sender should output 9
 ```
 
-Keep in mind that when *args* is sent through socketlib it is converted into a JSON object before being converted back on the other client. Therefore any objects *args* possessed will be copies of their original and any references will likely be broken. The function being executed will also be in the global scope instead of the current scope at the time of calling the Boneyard wrapper. This means that while your function cannot access local variables in the scope it was declared in, it can still access global foundry variables such as *game*, as seen in the first example.
+## Understanding Serialization
+Before Boneyard Socketlib Companion can send a given function and its `args` object through a socket they must each first be serialized. The function being executed will have no knowledge of the context it was originally declared in and is executed in the global scope. Any non-global variables not declared inside of the function or passed as parameters through the `args` object will not be defined. Additionally, any values `args` includes will be **copies** of their original values, breaking any references and potentially creating an infinite loop during serialization if there is a circular reference chain. 
 
-***Note:*** *I am a novice in regards to JS and this might not be an entirely accurate description of what's really going on, but it's my best understanding of the limitations of socketlib.*
+Most (if not all) Foundry Documents override the base object serialization process and safely serialize themselves despite having circular reference chains. However, the serialized data the client receives is still just a copy and will no longer refer to an actual Document. If your declared function needs a Document to do anything beyond read what data it had at the time of serialization, the Document's ID should be passed as an argument and the function should use that ID to retrieve the Document.
 
 ```js
-// This will cause errors when any client other than the sender executes the
-// function because game.user.targets won't correctly persist through the socket
-Boneyard.executeAsGM_wrapper((args)=>{
+// This function causes an error when any client besides the sender executes it
+// because 'game.user.targers' won't persist as desired through serialization
+Boneyard.Socketlib_Companion.executeAsGM((args)=>{
     args.targets.forEach(token => { // Throws an error
         token.actor.update({
             "data.hp.value": token.actor.data.data.hp.value - 1, // Reduce target hp by 1
         });
     });
-}, args={targets: game.user.targets});
+}, {targets: game.user.targets});
 
-// This is a workaround for the above. Token ids are strings and can be safely sent
-// over sockets, the receiving client can then find the desired tokens by their id
-Boneyard.executeAsGM_wrapper((args)=>{
-    args.target_ids.forEach(id => { // Find each token the player had targeted
-        let token = canvas.tokens.placeables.find(token => token.id === id);
+// This function correctly accomplishes the desired result of the previous example
+// by sending the targets as a list of IDs that the client uses to find the tokens
+Boneyard.Socketlib_Companion.executeAsGM((args)=>{
+    args.target_ids.forEach(id => {
+        const token = canvas.tokens.documentCollection.get(id);
+        if (token === undefined) return; // Check to see if token was found
         token.actor.update({
             "data.hp.value": token.actor.data.data.hp.value - 1, // Reduce target hp by 1
         });
     });
-}, args={target_ids: game.user.targets.ids});
+}, {target_ids: game.user.targets.ids});
 ```
-
-Boneyard provides a wrapper for each of the socketlib call functions.
-
-```js
-static executeAsGM_wrapper = async (func, args) => {...};
-static executeAsUser_wrapper = async (userID, func, args) => {...};
-static executeForAllGMs_wrapper = async (func, args) => {...};
-static executeForOtherGMs_wrapper = async (func, args) => {...};
-static executeForEveryone_wrapper = async (func, args) => {...};
-static executeForOthers_wrapper = async (func, args) => {...};
-static executeForUsers_wrapper = async (recipients, func, args) => {...};
-```
-
-If desired, you can also access Boneyard's socket directly as well as use the functions used for convering and recovering functions to and from strings. Since socketlib requires the function being called to be registered, this likely isn't very useful unless you use a world script or modify this module to register more functions, since the only registered function is Boneyard's *boneyard_exec* function and Boneyard already wraps each possible socketlib call with it.
-
-```js
-let result = await Boneyard.socket.executeAsGM("boneyard_exec", 
-  Boneyard.prepare_func(() => {console.log("Hello!"); return 5;})
-);
-console.log(result);
-
-// Sender should log '5', GM should log 'Hello!'
-```
-
-## Requirements
-The following modules are required for Boneyard to function properly:
-* [socketlib](https://github.com/manuelVo/foundryvtt-socketlib)
-
