@@ -8,6 +8,7 @@
 - [Requirements](#requirements)
 - [Socketlib Anonymous Function Wrappers](#socketlib-anonymous-function-wrappers)
 - [Understanding Serialization](#understanding-serialization)
+- [TODO](#todo)
 
 ## Security Warning
 Boneyard Socketlib Companion provides the ability to **execute arbitrary Javascript** code on other clients connected to a Foundry server. While this can be quite handy in its intended use as a library for macros that can allow players to modify actors and other documents they don't have permissions to access or perform any other actions that require GM privileges, it also has the potential to be used maliciously to perform **Javascript Injection** attacks. 
@@ -94,3 +95,6 @@ Boneyard.Socketlib_Companion.executeAsGM((args)=>{
     });
 }, {target_ids: game.user.targets.ids});
 ```
+
+## TODO
+- [ ] Add proper module settings so that the GM can determine which users are allowed to use the wrappers.
