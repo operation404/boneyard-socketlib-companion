@@ -32,14 +32,13 @@ Boneyard.Socketlib_Companion.executeForEveryone((args) => {
 Boneyard Socketlib Companion provides an asynchronous wrapper function for each of the socketlib api functions. These functions are available to be called through the global `Boneyard.Socketlib_Companion` namespace. 
 
 ```js
-// in the Socketlib_Companion class
-static async executeAsGM(func, args)
-static async executeAsUser(userID, func, args)
-static async executeForAllGMs(func, args)
-static async executeForOtherGMs(func, args)
-static async executeForEveryone(func, args)
-static async executeForOthers(func, args)
-static async executeForUsers(recipients, func, args)
+async executeAsGM(func, args);
+async executeAsUser(userID, func, args);
+async executeForAllGMs(func, args);
+async executeForOtherGMs(func, args);
+async executeForEveryone(func, args);
+async executeForOthers(func, args);
+async executeForUsers(recipients, func, args);
 
 // example call
 Boneyard.Socketlib_Companion.executeForEveryone(fn, args);
