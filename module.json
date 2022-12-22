@@ -1,41 +1,45 @@
 {
-	"id": "boneyard-socketlib-companion",
-	"title": "Boneyard Socketlib Companion",
-	"description": "Wrapper functions for executing anonymous functions via socketlib.",
-	"version": "This is auto replaced",
-	"library": "false",
-	"manifestPlusVersion": "1.2.0",
-	"compatibility": {
-		"minimum": 10,
-		"maximum": 10,
-		"verified": 10.291
-	},
-	"authors": [{
-		"name": "Lich",
-		"url": "https://github.com/operation404",
-		"discord": "operation404#8123"
-	}],
-	"relationships": {
-		"systems": [],
-		"requires": [{
-			"id": "socketlib",
-			"type": "module",
-			"manifest": "https://raw.githubusercontent.com/manuelVo/foundryvtt-socketlib/master/module.json",
-			"compatibility": {
-				"verified": "1.0.12"
-			}
-		}]
-	},
-	"esmodules": [
-		"scripts/socketlib_companion.js"
-	],
-	"scripts": [],
-	"styles": [],
-	"languages": [],
-	"socket": true,
-	"url": "This is auto replaced",
-	"manifest": "This is auto replaced",
-	"download": "This is auto replaced",
-	"license": "LICENSE",
-	"readme": "README.md"
+  "id": "boneyard-socketlib-companion",
+  "title": "Boneyard Socketlib Companion",
+  "description": "Wrapper functions for executing anonymous functions via socketlib.",
+  "version": "This is auto replaced",
+  "library": "false",
+  "manifestPlusVersion": "1.2.0",
+  "compatibility": {
+    "minimum": 10,
+    "maximum": 10,
+    "verified": 10.291
+  },
+  "authors": [
+    {
+      "name": "Lich",
+      "url": "https://github.com/operation404",
+      "discord": "operation404#8123"
+    }
+  ],
+  "relationships": {
+    "systems": [],
+    "requires": [
+      {
+        "id": "socketlib",
+        "type": "module",
+        "manifest": "https://raw.githubusercontent.com/manuelVo/foundryvtt-socketlib/master/module.json",
+        "compatibility": {
+          "verified": "1.0.12"
+        }
+      }
+    ]
+  },
+  "esmodules": [
+    "scripts/socketlib_companion.js"
+  ],
+  "scripts": [],
+  "styles": [],
+  "languages": [],
+  "socket": true,
+  "url": "This is auto replaced",
+  "manifest": "This is auto replaced",
+  "download": "This is auto replaced",
+  "license": "LICENSE",
+  "readme": "README.md"
 }
