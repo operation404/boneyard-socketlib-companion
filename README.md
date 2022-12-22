@@ -44,7 +44,9 @@ async executeForUsers(recipients, func, args);
 Boneyard.Socketlib_Companion.executeForEveryone(fn, args);
 ```
 
-The function wrappers all require a function argument to be passed, of which that function can optionally have a single argument `args` which should be an object containing any actual parameters the passed function might need. Some wrapper functions may also require additional parameters such as a user's ID.
+The function wrappers all require a function argument to be passed, of which that function can optionally have a single argument `args` which should be an object containing any actual parameters the passed function might need. Some wrapper functions also require additional parameters, specifically:
+- `executeAsUser()` requires the `userID` parameter which should be a string representing a user ID.
+- `executeForUsers()` requires the `recipients` parameter which should be an array of strings representing user IDs.
 
 These wrapper functions also return the socketlib api call return value, allowing you to receive information back from the clients the anonymous function was executed on.
 
