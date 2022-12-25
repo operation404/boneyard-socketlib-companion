@@ -14,13 +14,13 @@ export function prepare_settings() {
         default: CONST.USER_ROLES.GAMEMASTER,
         choices: {
             //[CONST.USER_ROLES.NONE]: "SETTINGS.FOUNDRY_CONST.NONE", // Not sure if this one is needed
-			[CONST.USER_ROLES.PLAYER]: "SETTINGS.FOUNDRY_CONST.PLAYER",
-			[CONST.USER_ROLES.TRUSTED]: "SETTINGS.FOUNDRY_CONST.TRUSTED",
-			[CONST.USER_ROLES.ASSISTANT]: "SETTINGS.FOUNDRY_CONST.ASSISTANT",
-			[CONST.USER_ROLES.GAMEMASTER]: "SETTINGS.FOUNDRY_CONST.GAMEMASTER"
+            [CONST.USER_ROLES.PLAYER]: "SETTINGS.FOUNDRY_CONST.PLAYER",
+            [CONST.USER_ROLES.TRUSTED]: "SETTINGS.FOUNDRY_CONST.TRUSTED",
+            [CONST.USER_ROLES.ASSISTANT]: "SETTINGS.FOUNDRY_CONST.ASSISTANT",
+            [CONST.USER_ROLES.GAMEMASTER]: "SETTINGS.FOUNDRY_CONST.GAMEMASTER"
         },
         //requiresReload: false,
-		//onChange: value => {} // value is the new value of the setting
+        //onChange: value => {} // value is the new value of the setting
     });
 
 }
