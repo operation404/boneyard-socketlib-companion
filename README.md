@@ -15,6 +15,9 @@ Boneyard Socketlib Companion provides the ability to **execute arbitrary Javascr
 
 As such, the author of this module can only recommend a GM to install it if you both understand how to properly utilize it and fully trust any players who are given access to it. Likewise as a player, you should only play in a Foundry game that has the Boneyard Socketlib Companion module if you fully trust the game's GM.
 
+### Permissions
+Boneyard Socketlib Compaion registers a world setting that defines the minimum user role level required to access its API. By default it is set to Game Master, meaning only GMs are able to use it. This should only be set to a lower permission level if you trust everyone who will be granted access.
+
 ## Requirements
 The following modules are required for Boneyard Socketlib Companion to function:
 * [socketlib](https://github.com/manuelVo/foundryvtt-socketlib)
