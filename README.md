@@ -100,4 +100,4 @@ Boneyard.Socketlib_Companion.executeAsGM((args)=>{
 ```
 
 ## TODO
-- [ ] Add proper module settings so that the GM can determine which users are allowed to use the wrappers.
+- [x] ~~Add proper module settings so that the GM can determine which users are allowed to use the wrappers.~~
