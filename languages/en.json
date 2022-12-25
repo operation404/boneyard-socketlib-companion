@@ -1,0 +1,9 @@
+{
+	"SETTINGS.Socket_Permissions_Name": "Required Permissions Level",
+	"SETTINGS.Socket_Permissions_Hint": "The minimum user role level required to make Boneyard Socketlib Companion API calls. If set to Game Master, only Game Masters can make calls. If set to Player, anyone can make calls. Only set this below Game Master if you trust everyone who will be given access.",
+	"SETTINGS.FOUNDRY_CONST.NONE": "None",
+	"SETTINGS.FOUNDRY_CONST.PLAYER": "Player",
+	"SETTINGS.FOUNDRY_CONST.TRUSTED": "Trusted Player",
+	"SETTINGS.FOUNDRY_CONST.ASSISTANT": "Assistant GM",
+	"SETTINGS.FOUNDRY_CONST.GAMEMASTER": "Game Master"
+}
