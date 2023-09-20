@@ -2,13 +2,13 @@
   "id": "boneyard-socketlib-companion",
   "title": "Boneyard Socketlib Companion",
   "description": "Wrapper functions for executing anonymous functions via socketlib.",
-  "version": "This is auto replaced",
+  "version": "#{VERSION}#",
   "library": "false",
   "manifestPlusVersion": "1.2.0",
   "compatibility": {
     "minimum": 10,
-    "verified": 11.301,
-    "maximum": 11
+    "verified": 11.308,
+    "_only_if_breaking__maximum": 11
   },
   "authors": [
     {
@@ -25,7 +25,7 @@
         "type": "module",
         "manifest": "https://raw.githubusercontent.com/manuelVo/foundryvtt-socketlib/master/module.json",
         "compatibility": {
-          "verified": "1.0.12"
+          "verified": "1.0.13"
         }
       }
     ]
@@ -43,9 +43,9 @@
     }
   ],
   "socket": true,
-  "url": "This is auto replaced",
-  "manifest": "This is auto replaced",
-  "download": "This is auto replaced",
+  "url": "#{URL}#",
+  "manifest": "#{MANIFEST}#",
+  "download": "#{DOWNLOAD}#",
   "license": "LICENSE",
   "readme": "README.md"
 }
